@@ -11,19 +11,20 @@ import {
   FaRegHeart,
 } from "react-icons/fa";
 import { CiMenuKebab } from "react-icons/ci";
+import Comments from "./Comments";
 
 export const WatchPage = () => {
   const [videoData, setVideoData] = useState(null);
   const [channelData, setChannelData] = useState(null);
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-  const param = searchParams.get("v");
+  const videoId = searchParams.get("v");
 
   useEffect(() => {
     dispatch(closeMenu());
 
     const fetchVideoDetails = async () => {
-      const videoUrl = getVideoUrl(param);
+      const videoUrl = getVideoUrl(videoId);
       const response = await fetch(videoUrl);
       const data = await response.json();
       setVideoData(data);
@@ -38,18 +39,20 @@ export const WatchPage = () => {
       setChannelData(data);
     };
 
-    if (param) {
+    if (videoId) {
       fetchVideoDetails();
     }
-  }, [dispatch, param]);
+  }, [dispatch, videoId]);
+
+  console.log(videoData);
 
   return (
-    <div className="w-full flex min-h-screen">
+    <div className="w-full flex min-h-screen overflow-y-auto">
       <div className="w-3/4 p-6">
         <div className="aspect-video w-full mb-2">
           <iframe
             className="w-full h-full rounded-xl"
-            src={`https://www.youtube.com/embed/${param}`}
+            src={`https://www.youtube.com/embed/${videoId}`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
@@ -104,7 +107,25 @@ export const WatchPage = () => {
 
           <div className="flex items-center gap-3 text-sm text-black flex-wrap">
             {[
-              { icon: <FaThumbsUp />, label: "319K" },
+              {
+                icon: <FaThumbsUp />,
+                label: videoData?.items[0]?.statistics?.likeCount
+                  ? (() => {
+                      const likes = parseInt(
+                        videoData.items[0].statistics.likeCount,
+                        10
+                      );
+
+                      if (likes >= 1_000_000) {
+                        return `${Math.round(likes / 1_000_000)}M`;
+                      } else if (likes >= 1_000) {
+                        return `${Math.round(likes / 1_000)}K`;
+                      } else {
+                        return `${likes}`;
+                      }
+                    })()
+                  : "",
+              },
               { icon: <FaThumbsDown /> },
               { icon: <FaShare />, label: "Share" },
               { icon: <FaDownload />, label: "Download" },
@@ -115,13 +136,19 @@ export const WatchPage = () => {
                 className="flex items-center bg-gray-100 gap-2 px-4 py-2 rounded-full transition cursor-pointer"
               >
                 {icon}
-                {label && <span>{label}</span>}
+                {label && <span className="font-bold">{label}</span>}
               </button>
             ))}
             <button className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full transition">
               <CiMenuKebab size={18} />
             </button>
           </div>
+        </div>
+        <div>
+          <div className="font-bold mt-4 text-2xl">
+            {videoData?.items[0]?.statistics?.commentCount} Comments
+          </div>
+          <Comments videoId={videoId} />
         </div>
       </div>
 
