@@ -11,7 +11,7 @@ export const MainContainer = () => {
     dispatch(openMenu());
   }, []);
   return (
-    <div className="flex-1 overflow-y-auto bg-white p-4">
+    <div className="flex-1 overflow-y-scroll bg-white p-4">
       <FilterButtonList />
       <VideoContainer />
     </div>

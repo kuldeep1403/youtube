@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import { CiMenuKebab } from "react-icons/ci";
 import Comments from "./Comments";
+import LiveChat from "./LiveChat";
 
 export const WatchPage = () => {
   const [videoData, setVideoData] = useState(null);
@@ -47,9 +48,9 @@ export const WatchPage = () => {
   console.log(videoData);
 
   return (
-    <div className="w-full flex min-h-screen overflow-y-auto">
-      <div className="w-3/4 p-6">
-        <div className="aspect-video w-full mb-2">
+    <div className="w-full flex min-h-screen overflow-y-scroll">
+      <div className="w-3/4 p-4">
+        <div className="h-[650px] w-full mb-2">
           <iframe
             className="w-full h-full rounded-xl"
             src={`https://www.youtube.com/embed/${videoId}`}
@@ -152,8 +153,10 @@ export const WatchPage = () => {
         </div>
       </div>
 
-      <div className="w-1/4 p-6 border-l border-gray-800">
-        <p className="text-gray-400 text-sm">Right Sidebar (1/4)</p>
+      <div className="w-1/4 mr-3">
+        <div className="overflow-y-auto p-4 ">
+          <LiveChat />
+        </div>
       </div>
     </div>
   );
