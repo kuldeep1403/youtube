@@ -33,3 +33,7 @@ export const getSearchDetailsAPI = (query) => {
 export const getCommentsThreadAPI = `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&key=${GOOGLE_API_KEY}&videoId=`;
 
 export const getRepliesAPI = `https://www.googleapis.com/youtube/v3/comments?part=snippet&key=${GOOGLE_API_KEY}&parentId=`;
+
+export const getVideoStatistics = (videoIds) => {
+  return `https://youtube.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${videoIds}&key=${GOOGLE_API_KEY}`;
+};
