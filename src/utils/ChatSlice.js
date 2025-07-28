@@ -12,12 +12,11 @@ const chatSlice = createSlice({
       const MAX_MESSAGES = 100;
 
       if (state.liveChat.length > MAX_MESSAGES) {
-        state.liveChat.splice(MAX_MESSAGES);
+        state.liveChat.splice(0, state.liveChat.length - MAX_MESSAGES);
       }
     },
   },
 });
 
 export const { addChats } = chatSlice.actions;
-
 export default chatSlice.reducer;
